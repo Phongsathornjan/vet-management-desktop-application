@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
+import 'package:vet_desktop/screen/registerscreen.dart';
 import 'package:vet_desktop/screen/stock_screen.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 
@@ -13,9 +14,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   /// Views to display
   List<Widget> views = [
-    Center(
-      child: Text('Account'),
-    ),
+    RegisterScreen(),
     Center(
       child: Text('Account'),
     ),
@@ -51,7 +50,7 @@ class _MainViewState extends State<MainView> {
                 items: const [
                   SideNavigationBarItem(
                     icon: Icons.dashboard,
-                    label: 'สมัครสมาชิกสำหรับลูกค้า',
+                    label: 'ลงทะเบียนสำหรับลูกค้า',
                   ),
                   SideNavigationBarItem(
                     icon: Icons.dashboard,
@@ -63,7 +62,7 @@ class _MainViewState extends State<MainView> {
                   ),
                   SideNavigationBarItem(
                     icon: Icons.settings,
-                    label: 'สต็อคสินค้า',
+                    label: 'สต๊อกสินค้า',
                   ),
                 ],
                 onTap: (index) {

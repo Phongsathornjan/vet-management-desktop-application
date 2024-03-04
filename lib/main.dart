@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vet_desktop/screen/main_view.dart';
+import 'package:vet_desktop/screen/loginscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainView(),
+      home: LoginScreen(),
     );
   }
 }
