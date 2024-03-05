@@ -1,21 +1,72 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:vet_desktop/component/mybutton.dart';
 import 'package:vet_desktop/component/mytextfield.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final emailcontroller = TextEditingController();
+
   final passcontroller = TextEditingController();
 
   final namecontroller = TextEditingController();
+
   final lastnamecontroller = TextEditingController();
-  final birthcontroller = TextEditingController();
+
   final phonecontroller = TextEditingController();
 
-  register() {}
+  Future insertrecord() async {
+    try {
+      String uri = 'http://127.0.0.1/php_api/register_save.php';
+      var res = await http.post(Uri.parse(uri), body: {
+        "username": emailcontroller.text,
+        "password": passcontroller.text,
+        "firstname": namecontroller.text,
+        "lastname": lastnamecontroller.text,
+        "phone": phonecontroller.text,
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["status"] == "notfound") {
+        _showMyDialog(response['message']);
+      } else if (response["status"] == "success") {
+        _showMyDialog(response['message']);
+      } else if (response["status"] == "error") {
+        _showMyDialog(response['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _showMyDialog(String txtMsg) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Expanded(
+              child: AlertDialog(
+            backgroundColor: Color.fromARGB(255, 233, 135, 7),
+            title: const Text('status'),
+            content: Text(txtMsg),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ));
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,15 +215,6 @@ class RegisterScreen extends StatelessWidget {
                     height: 15,
                   ),
                   MyTextFiled(
-                      controller: birthcontroller,
-                      hintText: 'Enter Birthday.',
-                      obscureText: false,
-                      labelText: 'Birthday',
-                      icon: Icon(Icons.cake_outlined)),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  MyTextFiled(
                       controller: phonecontroller,
                       hintText: 'Enter Your Phone Number.',
                       obscureText: false,
@@ -182,7 +224,9 @@ class RegisterScreen extends StatelessWidget {
                     height: 15,
                   ),
                   MyButton(
-                      onTap: () {},
+                      onTap: () {
+                        insertrecord();
+                      },
                       hinText: 'สมัครสมาชิก',
                       color: Color.fromARGB(255, 187, 166, 159)),
                 ],
