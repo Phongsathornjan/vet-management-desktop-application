@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
+import 'package:vet_desktop/screen/%E0%B8%B4bookqueuescreen.dart';
 import 'package:vet_desktop/screen/registerscreen.dart';
 import 'package:vet_desktop/screen/stock_screen.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
@@ -15,9 +16,7 @@ class _MainViewState extends State<MainView> {
   /// Views to display
   List<Widget> views = [
     RegisterScreen(),
-    Center(
-      child: Text('Account'),
-    ),
+    BookQueueScreen(),
     Center(
       child: Text('Settings'),
     ),

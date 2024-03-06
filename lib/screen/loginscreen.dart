@@ -1,13 +1,72 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:vet_desktop/component/mybutton.dart';
 import 'package:vet_desktop/component/mytextfield.dart';
 import 'package:vet_desktop/screen/main_view.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
+import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
-  final emailcontroller = TextEditingController();
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final usernamecontroller = TextEditingController();
   final passcontroller = TextEditingController();
+
+  Future login() async {
+    try {
+      String uri = 'http://127.0.0.1/php_api/verify.php';
+      var res = await http.post(Uri.parse(uri), body: {
+        "username": usernamecontroller.text,
+        "password": passcontroller.text,
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["status"] == "success") {
+        if (response["role"] == "admin") {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainView()));
+        } else {
+          _showMyDialog('สมาชิกโปรด login ผ่านโทรศัพท์มือถือ');
+        }
+      } else if (response["status"] == "no_match_pass") {
+        _showMyDialog(response['message']);
+        print(response['message']);
+      } else if (response["status"] == "no_username") {
+        _showMyDialog(response['message']);
+        print(response['message']);
+      } else if (response["status"] == "fill_in_blank") {
+        _showMyDialog(response['message']);
+        print(response['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _showMyDialog(String txtMsg) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Expanded(
+              child: AlertDialog(
+            backgroundColor: Color.fromARGB(255, 228, 180, 118),
+            title: const Text('status'),
+            content: Text(txtMsg),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ));
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +94,10 @@ class LoginScreen extends StatelessWidget {
                       height: 20,
                     ),
                     MyTextFiled(
-                      controller: emailcontroller,
-                      hintText: 'Enter your email.',
+                      controller: usernamecontroller,
+                      hintText: 'Enter your Username.',
                       obscureText: false,
-                      labelText: 'Email',
+                      labelText: 'Username',
                       icon: Icon(Icons.email_outlined),
                     ),
                     const SizedBox(
@@ -55,10 +114,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     MyButton(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainView()));
+                          login();
                         },
                         hinText: 'เข้าสู่ระบบ',
                         color: Color.fromARGB(255, 187, 166, 159)),

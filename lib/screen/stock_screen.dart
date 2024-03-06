@@ -18,6 +18,11 @@ class _StockScreenState extends State<StockScreen> {
   TextEditingController idsearch = TextEditingController();
   TextEditingController iddelete = TextEditingController();
 
+  TextEditingController product_name = TextEditingController();
+  TextEditingController product_stock = TextEditingController();
+  TextEditingController product_price = TextEditingController();
+  TextEditingController product_detail = TextEditingController();
+
   Future<void> getrecord(String ids, String idd) async {
     String uri = "http://127.0.0.1/php_api/view_product.php";
     if (ids != "") {
@@ -36,6 +41,56 @@ class _StockScreenState extends State<StockScreen> {
     }
   }
 
+  Future<void> addrecord(
+      String name, String stock, String price, String detail) async {
+    String uri = "http://127.0.0.1/php_api/add_product.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {
+        "product_name": name,
+        "product_stock": stock,
+        "product_price": price,
+        "product_detail": detail
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["status"] == "success") {
+        _showMyDialog(response['message']);
+      } else if (response["status"] == "error") {
+        _showMyDialog(response['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+    uri = "http://127.0.0.1/php_api/view_product.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+      setState(() {
+        product = jsonDecode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _showMyDialog(String txtMsg) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Expanded(
+              child: AlertDialog(
+            backgroundColor: Color.fromARGB(255, 228, 180, 118),
+            title: const Text('status'),
+            content: Text(txtMsg),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ));
+        });
+  }
+
   @override
   void initState() {
     getrecord("", "");
@@ -52,9 +107,6 @@ class _StockScreenState extends State<StockScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        actions: const [
-          Icon(Icons.search, size: 30, color: Colors.black),
-        ],
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Stack(
@@ -68,11 +120,15 @@ class _StockScreenState extends State<StockScreen> {
             height: 2000,
           ),
           Positioned(
-            top: 50,
-            left: 50,
+            top: 180,
+            left: 60,
             child: Container(
-              width: 1000,
-              height: 500,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(200, 255, 255, 255),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              width: 980,
+              height: 700,
               child: ListView.builder(
                 itemCount: product.length,
                 itemBuilder: (context, index) {
@@ -96,14 +152,14 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
           Positioned(
-            top: 60,
-            left: 1200,
+            top: 20,
+            left: 60,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 300,
+              width: 480,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -130,14 +186,14 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
           Positioned(
-            top: 250,
-            left: 1200,
+            top: 20,
+            left: 560,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 300,
+              width: 480,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -164,23 +220,58 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
           Positioned(
-            top: 480,
-            left: 1200,
+            top: 20,
+            left: 1100,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 300,
-              height: 70,
+              width: 500,
+              height: 330,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
+                    TextFormField(
+                      controller: product_name,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Enter Your Product Name'),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: product_stock,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Number of Products'),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: product_price,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Enter Your Product Price'),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: product_detail,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Enter Your Product detail'),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     MyButton(
-                      onTap: () {},
+                      onTap: () {
+                        addrecord(product_name.text, product_stock.text,
+                            product_price.text, product_detail.text);
+                      },
                       hinText: 'Add New Product',
-                      color: Color.fromARGB(255, 91, 255, 113),
+                      color: Color.fromARGB(255, 82, 255, 67),
                     ),
                   ],
                 ),

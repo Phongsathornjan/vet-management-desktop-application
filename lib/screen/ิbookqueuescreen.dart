@@ -1,82 +1,180 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class BookQueuePage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:vet_desktop/component/mybutton.dart';
+import 'package:vet_desktop/widgets/background_widget.dart';
+
+class BookQueueScreen extends StatefulWidget {
+  const BookQueueScreen({super.key});
+
   @override
-  _BookQueuePageState createState() => _BookQueuePageState();
+  State<BookQueueScreen> createState() => _BookQueueScreenState();
 }
 
-class _BookQueuePageState extends State<BookQueuePage> {
-  int selectedday = DateTime.now().day;
+class _BookQueueScreenState extends State<BookQueueScreen> {
+  List product = [];
+  int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
-  List<String> availableQueues = [];
-  List<String> bookedQueues = [];
+
+  TextEditingController booking_datetime = TextEditingController();
+  TextEditingController id_booker = TextEditingController();
+
+  Future<void> getrecord(String ids, String idd) async {
+    String uri = "http://127.0.0.1/php_api/view_product.php";
+
+    try {
+      var response = await http.get(Uri.parse(uri));
+      setState(() {
+        product = jsonDecode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _showMyDialog(String txtMsg) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Expanded(
+              child: AlertDialog(
+            backgroundColor: Color.fromARGB(255, 228, 180, 118),
+            title: const Text('status'),
+            content: Text(txtMsg),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ));
+        });
+  }
 
   @override
   void initState() {
+    getrecord("", "");
     super.initState();
-    //fetchData();
-  }
-
-  Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://your_php_api_url'));
-    final data = json.decode(response.body);
-    setState(() {
-      availableQueues = List<String>.from(data['available_queues']);
-      bookedQueues = List<String>.from(data['booked_queues']);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book Queue'),
+        title: const Center(
+          child: Text(
+            'จองคิว',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
-      body: Column(
-        children: [
+      body: Stack(
+        children: <Widget>[
+          background(),
           Container(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Select Month: '),
-                DropdownButton<int>(
-                  value: selectedMonth,
-                  onChanged: (int? value) {
-                    setState(() {
-                      selectedMonth = value!; // .! คือไม่สามารถเป็น null ได้
-                    });
-                  },
-                  items: List.generate(
-                    12,
-                    (index) => DropdownMenuItem<int>(
-                      value: index + 1,
-                      child: Text('${index + 1}'),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(126, 0, 0, 0),
+            ),
+            width: 2000,
+            height: 2000,
+          ),
+          Positioned(
+            top: 180,
+            left: 1100,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(200, 255, 255, 255),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              width: 480,
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: booking_datetime,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('เวลานัดหมาย'),
+                      ),
                     ),
-                  ),
-                ),
-                Text('Select Day: '),
-                DropdownButton<int>(
-                  value: selectedday,
-                  onChanged: (int? value) {
-                    setState(() {
-                      selectedday = value!; // .! คือไม่สามารถเป็น null ได้
-                    });
-                  },
-                  items: List.generate(
-                    31 - DateTime.now().day,
-                    (index) => DropdownMenuItem<int>(
-                      value: DateTime.now().day + index,
-                      child: Text('${DateTime.now().day + index}'),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: id_booker,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('ชื่อผู้จอง'),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 10),
+                    MyButton(
+                      onTap: () {},
+                      hinText: 'Add New Product',
+                      color: Color.fromARGB(255, 82, 255, 67),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 16),
-              ],
+              ),
             ),
           ),
+          Positioned(
+            top: 20,
+            left: 1100,
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(200, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  width: 480,
+                  height: 130,
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Select Year: '),
+                      DropdownButton<int>(
+                        value: selectedYear,
+                        onChanged: (int? value) {
+                          setState(() {
+                            selectedYear = value!;
+                          });
+                        },
+                        items: List.generate(
+                          10,
+                          (index) => DropdownMenuItem<int>(
+                            value: DateTime.now().year + index,
+                            child: Text('${DateTime.now().year + index}'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Text('Select Month: '),
+                      DropdownButton<int>(
+                        value: selectedMonth,
+                        onChanged: (int? value) {
+                          setState(() {
+                            selectedMonth = value!;
+                          });
+                        },
+                        items: List.generate(
+                          12,
+                          (index) => DropdownMenuItem<int>(
+                            value: index + 1,
+                            child: Text('${index + 1}'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

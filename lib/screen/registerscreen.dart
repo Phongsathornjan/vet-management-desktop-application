@@ -15,7 +15,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final emailcontroller = TextEditingController();
+  final usernamecontroller = TextEditingController();
 
   final passcontroller = TextEditingController();
 
@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       String uri = 'http://127.0.0.1/php_api/register_save.php';
       var res = await http.post(Uri.parse(uri), body: {
-        "username": emailcontroller.text,
+        "username": usernamecontroller.text,
         "password": passcontroller.text,
         "firstname": namecontroller.text,
         "lastname": lastnamecontroller.text,
@@ -37,11 +37,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       var response = jsonDecode(res.body);
-      if (response["status"] == "notfound") {
+      if (response["status"] == "fill_in_blank") {
         _showMyDialog(response['message']);
       } else if (response["status"] == "success") {
         _showMyDialog(response['message']);
       } else if (response["status"] == "error") {
+        _showMyDialog(response['message']);
+      } else if (response["status"] == "already") {
         _showMyDialog(response['message']);
       }
     } catch (e) {
@@ -55,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (BuildContext context) {
           return Expanded(
               child: AlertDialog(
-            backgroundColor: Color.fromARGB(255, 233, 135, 7),
+            backgroundColor: Color.fromARGB(255, 228, 180, 118),
             title: const Text('status'),
             content: Text(txtMsg),
             actions: <Widget>[
@@ -153,10 +155,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 15,
                   ),
                   MyTextFiled(
-                    controller: emailcontroller,
-                    hintText: 'Enter Email.',
+                    controller: usernamecontroller,
+                    hintText: 'Enter Username.',
                     obscureText: false,
-                    labelText: 'Email',
+                    labelText: 'Username',
                     icon: Icon(Icons.email_outlined),
                   ),
                   const SizedBox(
