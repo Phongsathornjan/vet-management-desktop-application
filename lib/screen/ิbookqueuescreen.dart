@@ -1,77 +1,67 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vet_desktop/component/drowdown.dart';
 import 'package:vet_desktop/component/mybutton.dart';
+import 'dart:convert';
+
 import 'package:vet_desktop/widgets/background_widget.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class BookQueueScreen extends StatefulWidget {
-  const BookQueueScreen({super.key});
-
+class BookQueuePage extends StatefulWidget {
   @override
-  State<BookQueueScreen> createState() => _BookQueueScreenState();
+  _BookQueuePageState createState() => _BookQueuePageState();
 }
 
-class _BookQueueScreenState extends State<BookQueueScreen> {
-  List product = [];
-  int selectedYear = DateTime.now().year;
-  int selectedMonth = DateTime.now().month;
+class _BookQueuePageState extends State<BookQueuePage> {
+  String booktime = '';
+  String cancel = '';
+  String admininsert = '';
 
-  TextEditingController booking_datetime = TextEditingController();
-  TextEditingController id_booker = TextEditingController();
+  TextEditingController name_booker = TextEditingController();
+  late CalendarFormat _calendarFormat;
+  late DateTime _focusedDay;
+  late DateTime _selectedDay;
 
-  Future<void> getrecord(String ids, String idd) async {
-    String uri = "http://127.0.0.1/php_api/view_product.php";
+  List data = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _calendarFormat = CalendarFormat.month;
+    _focusedDay = DateTime.now();
+    _selectedDay = DateTime.now();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    String uri = "http://127.0.0.1/php_api/view_queue.php";
     try {
-      var response = await http.get(Uri.parse(uri));
+      var res = await http.post(Uri.parse(uri), body: {
+        "year": _selectedDay.year.toString(),
+        "month": _selectedDay.month.toString(),
+        "day": _selectedDay.day.toString(),
+        "booktime": booktime,
+        "cancel": cancel,
+        "id_booker": name_booker.text,
+        "admininsert": admininsert,
+      });
       setState(() {
-        product = jsonDecode(response.body);
+        data = jsonDecode(res.body);
       });
     } catch (e) {
       print(e);
     }
-  }
-
-  void _showMyDialog(String txtMsg) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Expanded(
-              child: AlertDialog(
-            backgroundColor: Color.fromARGB(255, 228, 180, 118),
-            title: const Text('status'),
-            content: Text(txtMsg),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ));
-        });
-  }
-
-  @override
-  void initState() {
-    getrecord("", "");
-    super.initState();
+    admininsert = '';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'จองคิว',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: Center(child: Text('Book Queue')),
       ),
       body: Stack(
-        children: <Widget>[
+        children: [
           background(),
           Container(
             decoration: BoxDecoration(
@@ -81,39 +71,141 @@ class _BookQueueScreenState extends State<BookQueueScreen> {
             height: 2000,
           ),
           Positioned(
-            top: 180,
-            left: 1100,
+            top: 40,
+            left: 720,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 480,
-              height: 200,
+              width: 800,
+              height: 500,
+              child: TableCalendar(
+                firstDay: DateTime.utc(2022, 1, 1),
+                lastDay: DateTime.utc(2030, 12, 31),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                selectedDayPredicate: (day) {
+                  return isSameDay(_selectedDay, day);
+                },
+                onFormatChanged: (format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                  booktime = '';
+                  print(_selectedDay.year);
+                  print(_selectedDay.month);
+                  print(_selectedDay.day);
+                  fetchData();
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            top: 40,
+            left: 130,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(200, 255, 255, 255),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              width: 500,
+              height: 500,
+              child: Column(
+                children: [
+                  Text(
+                    'สถานะคิว',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(data[index]['booking_datetime']),
+                          subtitle: Text(
+                              data[index]['queue_status'] +
+                                  '    ' +
+                                  data[index]['id_booker'],
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 600,
+            left: 130,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(200, 255, 255, 255),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              width: 500,
+              height: 190,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: booking_datetime,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text('เวลานัดหมาย'),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: id_booker,
+                      controller: name_booker,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text('ชื่อผู้จอง'),
                       ),
                     ),
                     SizedBox(height: 10),
-                    MyButton(
-                      onTap: () {},
-                      hinText: 'Add New Product',
-                      color: Color.fromARGB(255, 82, 255, 67),
+                    Row(
+                      children: [
+                        TimeDropdownWidget(
+                          onChanged: (String newValue) {
+                            // ทำสิ่งที่คุณต้องการเมื่อเปลี่ยนเวลา
+                            booktime = '$newValue';
+                          },
+                          selectedTime: '10:00:00', // เวลาที่เลือกเริ่มต้น
+                        ),
+                        SizedBox(width: 30),
+                        Column(
+                          children: [
+                            Container(
+                              width: 200,
+                              child: MyButton(
+                                onTap: () {
+                                  cancel = '';
+                                  fetchData();
+                                  print(booktime);
+                                },
+                                hinText: 'จองคิว',
+                                color: Color.fromARGB(255, 82, 255, 67),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              width: 200,
+                              child: MyButton(
+                                onTap: () {
+                                  cancel = 'cancel';
+                                  fetchData();
+                                },
+                                hinText: 'ยกเลิกคิว',
+                                color: Color.fromARGB(255, 255, 95, 95),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -121,60 +213,21 @@ class _BookQueueScreenState extends State<BookQueueScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            left: 1100,
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(200, 255, 255, 255),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  width: 480,
-                  height: 130,
-                  padding: EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Select Year: '),
-                      DropdownButton<int>(
-                        value: selectedYear,
-                        onChanged: (int? value) {
-                          setState(() {
-                            selectedYear = value!;
-                          });
-                        },
-                        items: List.generate(
-                          10,
-                          (index) => DropdownMenuItem<int>(
-                            value: DateTime.now().year + index,
-                            child: Text('${DateTime.now().year + index}'),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Text('Select Month: '),
-                      DropdownButton<int>(
-                        value: selectedMonth,
-                        onChanged: (int? value) {
-                          setState(() {
-                            selectedMonth = value!;
-                          });
-                        },
-                        items: List.generate(
-                          12,
-                          (index) => DropdownMenuItem<int>(
-                            value: index + 1,
-                            child: Text('${index + 1}'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            top: 460,
+            left: 720,
+            child: Container(
+              width: 300,
+              child: MyButton(
+                onTap: () {
+                  admininsert = 'yes';
+                  print(admininsert);
+                  fetchData();
+                },
+                hinText: 'เพิ่มคิวนัดหมาย',
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

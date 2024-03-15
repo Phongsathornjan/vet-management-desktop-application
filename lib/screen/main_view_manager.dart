@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
 import 'package:vet_desktop/screen/%E0%B8%B4bookqueuescreen.dart';
-import 'package:vet_desktop/screen/registerscreen.dart';
+import 'package:vet_desktop/screen/edituser_screen.dart';
 import 'package:vet_desktop/screen/stock_screen.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 
-class MainView extends StatefulWidget {
-  MainView({Key? key}) : super(key: key);
+class MainViewManager extends StatefulWidget {
+  MainViewManager({Key? key}) : super(key: key);
 
   @override
-  _MainViewState createState() => _MainViewState();
+  _MainViewManagerState createState() => _MainViewManagerState();
 }
 
-class _MainViewState extends State<MainView> {
+class _MainViewManagerState extends State<MainViewManager> {
   /// Views to display
   List<Widget> views = [
-    RegisterScreen(),
     BookQueuePage(),
     StockScreen(),
+    EditUserScreen(),
   ];
 
   /// The currently selected index of the bar
@@ -45,16 +45,16 @@ class _MainViewState extends State<MainView> {
                 selectedIndex: selectedIndex,
                 items: const [
                   SideNavigationBarItem(
-                    icon: Icons.dashboard,
-                    label: 'ลงทะเบียนสำหรับลูกค้า',
-                  ),
-                  SideNavigationBarItem(
                     icon: Icons.calendar_month_outlined,
                     label: 'จองคิว',
                   ),
                   SideNavigationBarItem(
                     icon: Icons.settings,
                     label: 'สต๊อกสินค้า',
+                  ),
+                  SideNavigationBarItem(
+                    icon: Icons.edit,
+                    label: 'จัดการพนักงาน',
                   ),
                 ],
                 onTap: (index) {

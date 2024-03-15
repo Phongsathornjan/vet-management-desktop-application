@@ -135,14 +135,14 @@ class _StockScreenState extends State<StockScreen> {
                   return Card(
                     margin: EdgeInsets.all(10),
                     child: ListTile(
-                      title: Text('ID [' +
+                      title: Text('ID : ' +
                           product[index]['product_id'] +
-                          '] ' +
+                          '\n' +
                           product[index]['product_name']),
-                      subtitle: Text('คงเหลือ ' +
+                      subtitle: Text('คงเหลือ : ' +
                           product[index]['product_stock'] +
                           ' ชิ้น ' +
-                          ' ราคา ' +
+                          '\nราคา : ' +
                           product[index]['product_price'] +
                           'ฺBath'),
                     ),

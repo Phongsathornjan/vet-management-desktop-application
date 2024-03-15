@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:vet_desktop/component/mybutton.dart';
 import 'package:vet_desktop/component/mytextfield.dart';
 import 'package:vet_desktop/screen/main_view.dart';
+import 'package:vet_desktop/screen/main_view_manager.dart';
+import 'package:vet_desktop/screen/main_view_doctor.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,6 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (response["role"] == "admin") {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MainView()));
+        } else if (response["role"] == "doctor") {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainViewDoctor()));
+        } else if (response["role"] == "manager") {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainViewManager()));
         } else {
           _showMyDialog('สมาชิกโปรด login ผ่านโทรศัพท์มือถือ');
         }

@@ -7,22 +7,22 @@ import 'package:vet_desktop/widgets/background_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+class EditUserScreen extends StatefulWidget {
+  EditUserScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<EditUserScreen> createState() => _EditUserScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _EditUserScreenState extends State<EditUserScreen> {
+  List data = [];
+
+  TextEditingController iddelete = TextEditingController();
+
   final usernamecontroller = TextEditingController();
-
   final passcontroller = TextEditingController();
-
   final namecontroller = TextEditingController();
-
   final lastnamecontroller = TextEditingController();
-
   final phonecontroller = TextEditingController();
 
   Future insertrecord() async {
@@ -51,6 +51,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  Future<void> getrecord(String idd) async {
+    String uri = "http://127.0.0.1/php_api/view_user.php";
+    if (idd != "") {
+      uri = "http://127.0.0.1/php_api/view_user.php?iddelete=$idd";
+    }
+    try {
+      var response = await http.get(Uri.parse(uri));
+      setState(() {
+        data = jsonDecode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void _showMyDialog(String txtMsg) async {
     return showDialog(
         context: context,
@@ -71,12 +86,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
+  void initState() {
+    getrecord("");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'สมัครสมาชิก',
+            'จัดการ User',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -85,10 +106,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Stack(
         children: <Widget>[
           const background(),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(126, 0, 0, 0),
+            ),
+            width: 2000,
+            height: 2000,
+          ),
           Positioned(
-            top: 110,
-            left: 300,
-            right: 300,
+            top: 40,
+            left: 80,
             child: Container(
               decoration: const BoxDecoration(
                   color: Color.fromARGB(200, 255, 255, 255),
@@ -109,25 +136,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Row(
                             children: [
                               Text(
-                                'ลงทะเบียน',
+                                'เพิ่มข้อมูล',
                                 style: GoogleFonts.notoSansThai(
                                     textStyle: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w400),
                                     color: Color.fromARGB(255, 90, 90, 90)),
                                 textAlign: TextAlign.start,
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'กรอกข้อมูลเพื่อสมัครสมาชิก',
-                                style: GoogleFonts.notoSansThai(
-                                    textStyle: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
-                                    color: Color.fromARGB(255, 90, 90, 90)),
                               )
                             ],
                           ),
@@ -237,13 +252,99 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   MyButton(
                       onTap: () {
                         insertrecord();
+                        getrecord("");
                       },
-                      hinText: 'สมัครสมาชิก',
+                      hinText: 'เพิ่มข้อมูล',
                       color: Color.fromARGB(255, 187, 166, 159)),
                 ],
               )),
             ),
-          )
+          ),
+          Positioned(
+              top: 40,
+              left: 700,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(200, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                width: 900,
+                height: 800,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'จัดการ ID User',
+                    style: GoogleFonts.notoSansThai(
+                        textStyle: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w400),
+                        color: Color.fromARGB(255, 90, 90, 90)),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )),
+          Positioned(
+            top: 100,
+            left: 700,
+            child: Container(
+              width: 900,
+              height: 690,
+              child: ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.all(10),
+                    child: ListTile(
+                      title: Text('ID : ' +
+                          data[index]['id'] +
+                          '\nชื่อ : ' +
+                          data[index]['firstname'] +
+                          '\nนามสกุล : ' +
+                          data[index]['lastname'] +
+                          '\nUsername : ' +
+                          data[index]['username']),
+                      subtitle: Text('เบอร์ : ' +
+                          data[index]['phone'] +
+                          '\nrole : ' +
+                          data[index]['role']),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            top: 710,
+            left: 80,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(200, 255, 255, 255),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              width: 500,
+              height: 130,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: iddelete,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('ใส่รหัส User ID ที่ต้องการลบ'),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    MyButton(
+                      onTap: () {
+                        getrecord(iddelete.text);
+                      },
+                      hinText: 'Delete',
+                      color: Color.fromARGB(255, 255, 95, 95),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
