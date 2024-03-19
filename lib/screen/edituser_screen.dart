@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vet_desktop/component/mybutton.dart';
 import 'package:vet_desktop/component/mytextfield.dart';
+import 'package:vet_desktop/component/roledropdown.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,7 @@ class EditUserScreen extends StatefulWidget {
 
 class _EditUserScreenState extends State<EditUserScreen> {
   List data = [];
+  String role = '';
 
   TextEditingController iddelete = TextEditingController();
 
@@ -34,6 +36,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         "firstname": namecontroller.text,
         "lastname": lastnamecontroller.text,
         "phone": phonecontroller.text,
+        "role": role,
       });
 
       var response = jsonDecode(res.body);
@@ -77,7 +80,10 @@ class _EditUserScreenState extends State<EditUserScreen> {
             content: Text(txtMsg),
             actions: <Widget>[
               TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
+                onPressed: () {
+                  getrecord("");
+                  Navigator.pop(context, 'OK');
+                },
                 child: const Text('OK'),
               ),
             ],
@@ -246,6 +252,31 @@ class _EditUserScreenState extends State<EditUserScreen> {
                       obscureText: false,
                       labelText: 'Phone',
                       icon: Icon(Icons.phone_android_outlined)),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Text('เลือกระดับสมาชิก',
+                          style: GoogleFonts.notoSansThai(
+                              textStyle: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                              color: Color.fromARGB(255, 90, 90, 90))),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      roleDropdownWidget(
+                        onChanged: (String newValue) {
+                          // ทำสิ่งที่คุณต้องการเมื่อเปลี่ยนเวลา
+                          role = '$newValue';
+                        },
+                        selectedrole: 'member', // เวลาที่เลือกเริ่มต้น
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 15,
                   ),

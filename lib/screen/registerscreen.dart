@@ -34,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         "firstname": namecontroller.text,
         "lastname": lastnamecontroller.text,
         "phone": phonecontroller.text,
+        "role": 'member',
       });
 
       var response = jsonDecode(res.body);
