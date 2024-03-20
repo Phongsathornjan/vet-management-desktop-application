@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vet_desktop/component/mybutton.dart';
@@ -14,6 +13,7 @@ class StockScreen extends StatefulWidget {
 
 class _StockScreenState extends State<StockScreen> {
   List product = [];
+  bool isLoading = true;
 
   TextEditingController idsearch = TextEditingController();
   TextEditingController iddelete = TextEditingController();
@@ -24,17 +24,20 @@ class _StockScreenState extends State<StockScreen> {
   TextEditingController product_detail = TextEditingController();
 
   Future<void> getrecord(String ids, String idd) async {
-    String uri = "http://127.0.0.1/php_api/view_product.php";
+    String uri = "https://setest123.000webhostapp.com/php_api/view_product.php";
     if (ids != "") {
-      uri = "http://127.0.0.1/php_api/view_product.php?idsearch=$ids";
+      uri =
+          "https://setest123.000webhostapp.com/php_api/view_product.php?idsearch=$ids";
     } else if (idd != "") {
-      uri = "http://127.0.0.1/php_api/view_product.php?iddelete=$idd";
+      uri =
+          "https://setest123.000webhostapp.com/php_api/view_product.php?iddelete=$idd";
     }
 
     try {
       var response = await http.get(Uri.parse(uri));
       setState(() {
         product = jsonDecode(response.body);
+        isLoading = false; // เมื่อโหลดเสร็จสิ้นกำหนด isLoading เป็น false
       });
     } catch (e) {
       print(e);
@@ -43,7 +46,7 @@ class _StockScreenState extends State<StockScreen> {
 
   Future<void> addrecord(
       String name, String stock, String price, String detail) async {
-    String uri = "http://127.0.0.1/php_api/add_product.php";
+    String uri = "https://setest123.000webhostapp.com/php_api/add_product.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {
         "product_name": name,
@@ -61,7 +64,7 @@ class _StockScreenState extends State<StockScreen> {
     } catch (e) {
       print(e);
     }
-    uri = "http://127.0.0.1/php_api/view_product.php";
+    uri = "https://setest123.000webhostapp.com/php_api/view_product.php";
     try {
       var response = await http.get(Uri.parse(uri));
       setState(() {
@@ -112,45 +115,11 @@ class _StockScreenState extends State<StockScreen> {
       body: Stack(
         children: <Widget>[
           background(),
-          Container(
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(126, 0, 0, 0),
-            ),
-            width: 2000,
-            height: 2000,
-          ),
-          Positioned(
-            top: 180,
-            left: 60,
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(200, 255, 255, 255),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              width: 980,
-              height: 700,
-              child: ListView.builder(
-                itemCount: product.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.all(10),
-                    child: ListTile(
-                      title: Text('ID : ' +
-                          product[index]['product_id'] +
-                          '\n' +
-                          product[index]['product_name']),
-                      subtitle: Text('คงเหลือ : ' +
-                          product[index]['product_stock'] +
-                          ' ชิ้น ' +
-                          '\nราคา : ' +
-                          product[index]['product_price'] +
-                          'ฺBath'),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : buildProductList(),
           Positioned(
             top: 20,
             left: 60,
@@ -279,6 +248,41 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildProductList() {
+    return Positioned(
+      top: 180,
+      left: 60,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(200, 255, 255, 255),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        width: 980,
+        height: 700,
+        child: ListView.builder(
+          itemCount: product.length,
+          itemBuilder: (context, index) {
+            return Card(
+              margin: EdgeInsets.all(10),
+              child: ListTile(
+                title: Text('ID : ' +
+                    product[index]['product_id'] +
+                    '\n' +
+                    product[index]['product_name']),
+                subtitle: Text('คงเหลือ : ' +
+                    product[index]['product_stock'] +
+                    ' ชิ้น ' +
+                    '\nราคา : ' +
+                    product[index]['product_price'] +
+                    'ฺBath'),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

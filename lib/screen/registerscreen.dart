@@ -27,7 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future insertrecord() async {
     try {
-      String uri = 'http://127.0.0.1/php_api/register_save.php';
+      String uri =
+          'https://setest123.000webhostapp.com/php_api/register_save.php';
       var res = await http.post(Uri.parse(uri), body: {
         "username": usernamecontroller.text,
         "password": passcontroller.text,

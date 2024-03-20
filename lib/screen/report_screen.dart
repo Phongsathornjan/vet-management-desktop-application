@@ -30,7 +30,8 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Future<void> getrecord() async {
     String nametext = name.text;
-    String uri = "http://127.0.0.1/php_api/view_pet.php?owner_name=$nametext";
+    String uri =
+        "https://setest123.000webhostapp.com/php_api/view_pet.php?owner_name=$nametext";
     try {
       var response = await http.get(Uri.parse(uri));
       setState(() {
@@ -43,7 +44,8 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Future<void> get_history_record() async {
     String idpet = id_pet.text;
-    String uri = "http://127.0.0.1/php_api/view_pet_data.php?idpet=$idpet";
+    String uri =
+        "https://setest123.000webhostapp.com/php_api/view_pet_data.php?idpet=$idpet";
     try {
       var response = await http.get(Uri.parse(uri));
       setState(() {
@@ -55,7 +57,8 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Future<void> addhistory() async {
-    String uri = "http://127.0.0.1/php_api/add_pet_history.php";
+    String uri =
+        "https://setest123.000webhostapp.com/php_api/add_pet_history.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {
         "idpet": id_pet.text,
@@ -76,7 +79,7 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Future<void> addpet() async {
-    String uri = "http://127.0.0.1/php_api/add_pet.php";
+    String uri = "https://setest123.000webhostapp.com/php_api/add_pet.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {
         "pet_name": pet_name.text,

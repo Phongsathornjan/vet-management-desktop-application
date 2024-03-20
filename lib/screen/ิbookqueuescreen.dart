@@ -24,6 +24,9 @@ class _BookQueuePageState extends State<BookQueuePage> {
 
   List data = [];
 
+  bool isLoading =
+      false; // เพิ่มตัวแปร isLoading เพื่อตรวจสอบสถานะการโหลดข้อมูล
+
   @override
   void initState() {
     super.initState();
@@ -34,8 +37,12 @@ class _BookQueuePageState extends State<BookQueuePage> {
   }
 
   Future<void> fetchData() async {
-    String uri = "http://127.0.0.1/php_api/view_queue.php";
+    String uri = "https://setest123.000webhostapp.com/php_api/view_queue.php";
+    // String uri = "http://127.0.0.1/php_api/view_queue.php";
     try {
+      setState(() {
+        isLoading = true; // ตั้งค่า isLoading เป็น true เมื่อเริ่มโหลดข้อมูล
+      });
       var res = await http.post(Uri.parse(uri), body: {
         "year": _selectedDay.year.toString(),
         "month": _selectedDay.month.toString(),
@@ -47,11 +54,16 @@ class _BookQueuePageState extends State<BookQueuePage> {
       });
       setState(() {
         data = jsonDecode(res.body);
+        isLoading =
+            false; // ตั้งค่า isLoading เป็น false เมื่อโหลดข้อมูลเสร็จสิ้น
       });
     } catch (e) {
       print(e);
+      setState(() {
+        isLoading =
+            false; // ตั้งค่า isLoading เป็น false ในกรณีที่เกิดข้อผิดพลาด
+      });
     }
-    admininsert = '';
   }
 
   @override
@@ -127,20 +139,25 @@ class _BookQueuePageState extends State<BookQueuePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(data[index]['booking_datetime']),
-                          subtitle: Text(
-                              data[index]['queue_status'] +
-                                  '    ' +
-                                  data[index]['id_booker'],
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        );
-                      },
-                    ),
-                  ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(data[index]['booking_datetime']),
+                                subtitle: Text(
+                                    data[index]['queue_status'] +
+                                        '    ' +
+                                        data[index]['id_booker'],
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              );
+                            },
+                          ),
+                  )
                 ],
               ),
             ),
@@ -183,9 +200,8 @@ class _BookQueuePageState extends State<BookQueuePage> {
                               width: 200,
                               child: MyButton(
                                 onTap: () {
-                                  cancel = '';
                                   fetchData();
-                                  print(booktime);
+                                  booktime = '';
                                 },
                                 hinText: 'จองคิว',
                                 color: Color.fromARGB(255, 82, 255, 67),
@@ -198,6 +214,7 @@ class _BookQueuePageState extends State<BookQueuePage> {
                                 onTap: () {
                                   cancel = 'cancel';
                                   fetchData();
+                                  cancel = '';
                                 },
                                 hinText: 'ยกเลิกคิว',
                                 color: Color.fromARGB(255, 255, 95, 95),
@@ -222,6 +239,7 @@ class _BookQueuePageState extends State<BookQueuePage> {
                   admininsert = 'yes';
                   print(admininsert);
                   fetchData();
+                  admininsert = '';
                 },
                 hinText: 'เพิ่มคิวนัดหมาย',
                 color: Color.fromARGB(255, 255, 255, 255),

@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future login() async {
     try {
-      String uri = 'http://127.0.0.1/php_api/verify.php';
+      String uri = 'https://setest123.000webhostapp.com/php_api/verify.php';
       var res = await http.post(Uri.parse(uri), body: {
         "username": usernamecontroller.text,
         "password": passcontroller.text,
