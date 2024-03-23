@@ -54,22 +54,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _showMyDialog(String txtMsg) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Expanded(
-              child: AlertDialog(
-            backgroundColor: Color.fromARGB(255, 228, 180, 118),
-            title: const Text('status'),
-            content: Text(txtMsg),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ));
-        });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 228, 180, 118),
+          title: const Text('status'),
+          content: Text(txtMsg),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -87,6 +87,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Stack(
         children: <Widget>[
           const background(),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(126, 0, 0, 0),
+            ),
+            width: 2000,
+            height: 2000,
+          ),
           Positioned(
             top: 110,
             left: 300,

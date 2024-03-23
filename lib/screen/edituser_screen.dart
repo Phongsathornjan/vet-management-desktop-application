@@ -56,9 +56,10 @@ class _EditUserScreenState extends State<EditUserScreen> {
   }
 
   Future<void> getrecord(String idd) async {
-    String uri = "http://127.0.0.1/php_api/view_user.php";
+    String uri = "https://setest123.000webhostapp.com/php_api/view_user.php";
     if (idd != "") {
-      uri = "http://127.0.0.1/php_api/view_user.php?iddelete=$idd";
+      uri =
+          "https://setest123.000webhostapp.com/php_api/view_user.php?iddelete=$idd";
     }
     try {
       var response = await http.get(Uri.parse(uri));
@@ -72,24 +73,24 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
   void _showMyDialog(String txtMsg) async {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Expanded(
-              child: AlertDialog(
-            backgroundColor: Color.fromARGB(255, 228, 180, 118),
-            title: const Text('status'),
-            content: Text(txtMsg),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  getrecord("");
-                  Navigator.pop(context, 'OK');
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ));
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 228, 180, 118),
+          title: const Text('status'),
+          content: Text(txtMsg),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                getrecord("");
+                Navigator.pop(context, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

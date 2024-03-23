@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
 import 'package:vet_desktop/screen/%E0%B8%B4bookqueuescreen.dart';
 import 'package:vet_desktop/screen/registerscreen.dart';
+import 'package:vet_desktop/screen/selling_screen.dart';
 import 'package:vet_desktop/screen/stock_screen.dart';
 import 'package:vet_desktop/widgets/background_widget.dart';
 
@@ -16,6 +17,7 @@ class _MainViewState extends State<MainView> {
   /// Views to display
   List<Widget> views = [
     RegisterScreen(),
+    SellingScreen(),
     BookQueuePage(),
     StockScreen(),
   ];
@@ -47,6 +49,10 @@ class _MainViewState extends State<MainView> {
                   SideNavigationBarItem(
                     icon: Icons.dashboard,
                     label: 'ลงทะเบียนสำหรับลูกค้า',
+                  ),
+                  SideNavigationBarItem(
+                    icon: Icons.sell_outlined,
+                    label: 'ระบบขาย',
                   ),
                   SideNavigationBarItem(
                     icon: Icons.calendar_month_outlined,
