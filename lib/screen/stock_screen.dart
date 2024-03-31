@@ -14,6 +14,7 @@ class StockScreen extends StatefulWidget {
 class _StockScreenState extends State<StockScreen> {
   List product = [];
   bool isLoading = true;
+  List<int> nums = List<int>.filled(100, 0);
 
   TextEditingController idsearch = TextEditingController();
   TextEditingController iddelete = TextEditingController();
@@ -38,6 +39,7 @@ class _StockScreenState extends State<StockScreen> {
       setState(() {
         product = jsonDecode(response.body);
         isLoading = false; // เมื่อโหลดเสร็จสิ้นกำหนด isLoading เป็น false
+        getnum();
       });
     } catch (e) {
       print(e);
@@ -58,6 +60,7 @@ class _StockScreenState extends State<StockScreen> {
       var response = jsonDecode(res.body);
       if (response["status"] == "success") {
         _showMyDialog(response['message']);
+        getnum();
       } else if (response["status"] == "error") {
         _showMyDialog(response['message']);
       } else if (response["status"] == "fill_in_blank") {
@@ -71,9 +74,46 @@ class _StockScreenState extends State<StockScreen> {
       var response = await http.get(Uri.parse(uri));
       setState(() {
         product = jsonDecode(response.body);
+        getnum();
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> editstock(String id, String stock) async {
+    String uri = "https://setest123.000webhostapp.com/php_api/edit_stock.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {
+        "product_id": id,
+        "product_stock": stock,
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["status"] == "success") {
+        _showMyDialog(response['message']);
+        getnum();
+      } else if (response["status"] == "error") {
+        _showMyDialog(response['message']);
+      }
+    } catch (e) {
+      print(e);
+    }
+    uri = "https://setest123.000webhostapp.com/php_api/view_product.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+      setState(() {
+        product = jsonDecode(response.body);
+        getnum();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getnum() async {
+    for (var i = 0; i < product.length; i++) {
+      nums[i] = int.parse(product[i]['product_stock']);
     }
   }
 
@@ -263,7 +303,7 @@ class _StockScreenState extends State<StockScreen> {
           color: const Color.fromARGB(200, 255, 255, 255),
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
-        width: 980,
+        width: 640,
         height: 700,
         child: ListView.builder(
           itemCount: product.length,
@@ -281,6 +321,45 @@ class _StockScreenState extends State<StockScreen> {
                     '\nราคา : ' +
                     product[index]['product_price'] +
                     'ฺBath'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () {
+                        if (nums[index] != 0) {
+                          setState(() {
+                            nums[
+                                index]--; // ลดค่า num ของ Card ที่ index ลง 1 เมื่อกดปุ่ม -
+                          });
+                        }
+                      },
+                    ),
+                    Text(
+                      '${nums[index]}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          nums[
+                              index]++; // เพิ่มค่า num ของ Card ที่ index ขึ้น 1 เมื่อกดปุ่ม +
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit_note_rounded),
+                      onPressed: () {
+                        print(product[index]['product_id'] +
+                            "  " +
+                            nums[index].toString());
+                        editstock(product[index]['product_id'],
+                            nums[index].toString());
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           },
