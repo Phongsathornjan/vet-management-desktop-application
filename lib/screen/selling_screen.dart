@@ -193,8 +193,8 @@ class _SellingScreenState extends State<SellingScreen> {
                 )
               : buildlivebasketList(),
           Positioned(
-            top: 20,
-            left: 500,
+            top: 10,
+            left: 320,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
@@ -227,14 +227,14 @@ class _SellingScreenState extends State<SellingScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            left: 60,
+            top: 10,
+            left: 10,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 400,
+              width: 300,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(50.0),
@@ -253,14 +253,14 @@ class _SellingScreenState extends State<SellingScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            left: 900,
+            top: 10,
+            left: 650,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 640,
+              width: 600,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -315,15 +315,15 @@ class _SellingScreenState extends State<SellingScreen> {
 
   Widget buildProductList() {
     return Positioned(
-      top: 180,
-      left: 60,
+      top: 150,
+      left: 10,
       child: Container(
         decoration: BoxDecoration(
           color: const Color.fromARGB(200, 255, 255, 255),
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
-        width: 640,
-        height: 700,
+        width: 600,
+        height: 480,
         child: ListView.builder(
           itemCount: product.length,
           itemBuilder: (context, index) {
@@ -392,15 +392,15 @@ class _SellingScreenState extends State<SellingScreen> {
 
   Widget buildlivebasketList() {
     return Positioned(
-      top: 180,
-      left: 900,
+      top: 150,
+      left: 650,
       child: Container(
         decoration: BoxDecoration(
           color: const Color.fromARGB(200, 255, 255, 255),
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
-        width: 640,
-        height: 700,
+        width: 600,
+        height: 480,
         child: ListView.builder(
           itemCount: livebasket.length,
           itemBuilder: (context, index) {

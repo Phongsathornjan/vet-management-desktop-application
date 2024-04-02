@@ -122,14 +122,14 @@ class _EditUserScreenState extends State<EditUserScreen> {
             height: 2000,
           ),
           Positioned(
-            top: 40,
-            left: 80,
+            top: 10,
+            left: 10,
             child: Container(
               decoration: const BoxDecoration(
                   color: Color.fromARGB(200, 255, 255, 255),
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               width: 500,
-              height: 630,
+              height: 600,
               child: Form(
                   child: Column(
                 children: [
@@ -294,14 +294,14 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
           ),
           Positioned(
-              top: 40,
-              left: 700,
+              top: 10,
+              left: 520,
               child: Container(
                 decoration: const BoxDecoration(
                     color: Color.fromARGB(200, 255, 255, 255),
                     borderRadius: BorderRadius.all(Radius.circular(15))),
-                width: 900,
-                height: 800,
+                width: 700,
+                height: 460,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
@@ -315,11 +315,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 ),
               )),
           Positioned(
-            top: 100,
-            left: 700,
+            top: 50,
+            left: 520,
             child: Container(
-              width: 900,
-              height: 690,
+              width: 700,
+              height: 400,
               child: ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
@@ -345,8 +345,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
           ),
           Positioned(
-            top: 710,
-            left: 80,
+            top: 480,
+            left: 520,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),

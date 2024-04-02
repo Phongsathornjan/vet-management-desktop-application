@@ -157,20 +157,27 @@ class _StockScreenState extends State<StockScreen> {
       body: Stack(
         children: <Widget>[
           background(),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(126, 0, 0, 0),
+            ),
+            width: 2000,
+            height: 2000,
+          ),
           isLoading
               ? Center(
                   child: CircularProgressIndicator(),
                 )
               : buildProductList(),
           Positioned(
-            top: 20,
-            left: 60,
+            top: 10,
+            left: 10,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 480,
+              width: 280,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -197,14 +204,14 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            left: 560,
+            top: 10,
+            left: 330,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 480,
+              width: 280,
               height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -231,8 +238,8 @@ class _StockScreenState extends State<StockScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            left: 1100,
+            top: 10,
+            left: 660,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
@@ -296,15 +303,15 @@ class _StockScreenState extends State<StockScreen> {
 
   Widget buildProductList() {
     return Positioned(
-      top: 180,
-      left: 60,
+      top: 150,
+      left: 10,
       child: Container(
         decoration: BoxDecoration(
           color: const Color.fromARGB(200, 255, 255, 255),
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
-        width: 640,
-        height: 700,
+        width: 600,
+        height: 450,
         child: ListView.builder(
           itemCount: product.length,
           itemBuilder: (context, index) {

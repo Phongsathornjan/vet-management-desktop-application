@@ -83,15 +83,15 @@ class _BookQueuePageState extends State<BookQueuePage> {
             height: 2000,
           ),
           Positioned(
-            top: 40,
-            left: 720,
+            top: 10,
+            left: 540,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              width: 800,
-              height: 500,
+              width: 720,
+              height: 420,
               child: TableCalendar(
                 firstDay: DateTime.utc(2022, 1, 1),
                 lastDay: DateTime.utc(2030, 12, 31),
@@ -123,15 +123,15 @@ class _BookQueuePageState extends State<BookQueuePage> {
             ),
           ),
           Positioned(
-            top: 40,
-            left: 130,
+            top: 10,
+            left: 10,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               width: 500,
-              height: 500,
+              height: 420,
               child: Column(
                 children: [
                   Text(
@@ -163,8 +163,8 @@ class _BookQueuePageState extends State<BookQueuePage> {
             ),
           ),
           Positioned(
-            top: 600,
-            left: 130,
+            top: 450,
+            left: 10,
             child: Container(
               decoration: BoxDecoration(
                 color: const Color.fromARGB(200, 255, 255, 255),
@@ -230,8 +230,8 @@ class _BookQueuePageState extends State<BookQueuePage> {
             ),
           ),
           Positioned(
-            top: 460,
-            left: 720,
+            top: 370,
+            left: 550,
             child: Container(
               width: 300,
               child: MyButton(

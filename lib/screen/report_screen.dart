@@ -140,15 +140,15 @@ class _ReportScreenState extends State<ReportScreen> {
             height: 2000,
           ),
           Positioned(
-              top: 40,
-              left: 1000,
+              top: 10,
+              left: 730,
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(200, 255, 255, 255),
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                width: 600,
-                height: 860,
+                width: 520,
+                height: 620,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -187,11 +187,11 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               )),
           Positioned(
-            top: 180,
-            left: 1000,
+            top: 150,
+            left: 730,
             child: Container(
-              width: 600,
-              height: 340,
+              width: 520,
+              height: 150,
               child: ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
@@ -214,10 +214,10 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           Positioned(
-            top: 550,
-            left: 1000,
+            top: 300,
+            left: 730,
             child: Container(
-              width: 600,
+              width: 576,
               height: 350,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -247,7 +247,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 60,
+                          width: 10,
                         ),
                         Container(
                           width: 250,
@@ -279,7 +279,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 60,
+                          width: 10,
                         ),
                         Container(
                           width: 250,
@@ -311,7 +311,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 60,
+                          width: 10,
                         ),
                         Container(
                           width: 250,
@@ -351,15 +351,15 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           Positioned(
-              top: 40,
-              left: 130,
+              top: 10,
+              left: 10,
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(200, 255, 255, 255),
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                width: 800,
-                height: 480,
+                width: 700,
+                height: 300,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -393,8 +393,8 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               )),
           Positioned(
-            top: 50,
-            left: 280,
+            top: 25,
+            left: 170,
             child: Container(
               width: 200,
               child: TextFormField(
@@ -407,11 +407,11 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           Positioned(
-            top: 120,
-            left: 150,
+            top: 90,
+            left: 10,
             child: Container(
-              width: 750,
-              height: 380,
+              width: 700,
+              height: 200,
               child: ListView.builder(
                 itemCount: petdata.length,
                 itemBuilder: (context, index) {
@@ -431,15 +431,15 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
           Positioned(
-              top: 550,
-              left: 130,
+              top: 320,
+              left: 10,
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(200, 255, 255, 255),
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                width: 800,
-                height: 350,
+                width: 700,
+                height: 320,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
