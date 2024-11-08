@@ -1,16 +1,7 @@
-# vet_desktop
+- This group project includes both a Windows app and a mobile app, with four roles: admin, doctor, manager,and member.
+- I contributed as a programmer using Flutter and PHP API to query data from a MySQL database
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+All github
+phpapi : github.com/Phongsathornjan/phpAPI-for-vetmanagement
+desktop application : github.com/Phongsathornjan/vet-management-desktop-application
+mobile application : github.com/Phongsathornjan/vet-management-mobile-application
